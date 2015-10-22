@@ -62,11 +62,3 @@ vector<int> singleNumber(vector<int>& nums) {
 	ans[1] = ansY;
 	return ans;
 }
-int main()
-{
-	vector<int>nums(2,0);
-	nums[0] = 0;
-	nums[1] = 1;
-	singleNumber(nums);
-	return 0;
-}
