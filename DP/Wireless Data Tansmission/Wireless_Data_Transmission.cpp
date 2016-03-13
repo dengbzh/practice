@@ -140,7 +140,7 @@ int constructor(int numOfState,int numOfSlot,double Pg, double *stateMetric)
     }
     return OK;
 }
-double  makedesision(int numOfState,int numOfSlot,int *action,int *channel,double *stateMetric,double Pg)
+double  makedecision(int numOfState,int numOfSlot,int *action,int *channel,double *stateMetric,double Pg)
 {
     int start_s = (numOfState -1)>>1;
     double Pb = 1.0 - Pg;
@@ -211,7 +211,7 @@ int main()
 
   if(constructor(numOfState,numOfSlot,Pg, stateMetric) == OK)
   {
-      double cost = makedesision(numOfState,numOfSlot,action,channel,stateMetric,Pg);
+      double cost = makedecision(numOfState,numOfSlot,action,channel,stateMetric,Pg);
 
 	  printf("channel condition: ");
 	  for (int i = 0; i < numOfSlot; i++) {
