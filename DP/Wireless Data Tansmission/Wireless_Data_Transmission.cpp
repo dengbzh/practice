@@ -6,7 +6,7 @@
 #define OK  0
 #define ERR -1
 #define MIN(x,y) ((x)<(y) ?(x):(y))
-
+#define MAX_TEST 50
 
 int maxLeftPackage(int numOfPackage,int numOfSlot,int slotNum)
 {
@@ -186,46 +186,58 @@ double  makedecision(int numOfState,int numOfSlot,int *action,int *channel,doubl
     }
 	return cost;
 }
-
+void channelGen(int *channel, int numOfSlot,double p)
+{
+	for (int i = 0; i < numOfSlot; ++i)
+	{
+		if (rand() % 100 >= p*100)
+		{
+			channel[i] = 0;
+		}
+		else
+		{
+			channel[i] = 1;
+		}
+	}
+}
 int main()
 {
   int numOfSlot = 10;
   int numOfPackage = 5;
-  double Pg = 0.7;
+  double Pg = 0.3;
   int *action = new int[numOfSlot];
   int numOfState = (numOfPackage + 1) << 1;
   double *stateMetric =  new double[numOfSlot*numOfState];
   int *channel = new int[numOfSlot];
-  for(int i = 0; i < numOfSlot; ++i)
-  {
-	  int q = rand();
-      if(rand()%10 >= 7)
-      {
-        channel[i] = 0;
-      }
-      else
-      {
-        channel[i] = 1;
-      }
-  }
 
   if(constructor(numOfState,numOfSlot,Pg, stateMetric) == OK)
   {
-      double cost = makedecision(numOfState,numOfSlot,action,channel,stateMetric,Pg);
+	  double tot_cost = 0;
+	  for (int j = 0;j < MAX_TEST;++j)
+	  {
+		  channelGen(channel, numOfSlot,Pg);
+		  double cost = makedecision(numOfState, numOfSlot, action, channel, stateMetric, Pg);
 
-	  printf("channel condition: ");
-	  for (int i = 0; i < numOfSlot; i++) {
-		  /* code */
-		  printf("%d ", channel[i]);
+		  printf("channel condition: ");
+		  for (int i = 0; i < numOfSlot; i++) {
+			  /* code */
+			  printf("%d ", channel[i]);
+		  }
+		  printf("\n");
+		  printf("stratige: ");
+		  for (int i = 0; i < numOfSlot; i++) {
+			  /* code */
+			  printf("%d ", action[i]);
+		  }
+		  printf("\n");
+		  printf("Total comsumption:%f\n", cost);
+		  tot_cost += cost;
+		  printf("-------------------------------\n");
 	  }
-	  printf("\n");
-      printf("stratige: ");
-      for (int i = 0; i < numOfSlot; i++) {
-        /* code */
-        printf("%d ",action[i]);
-      }
-      printf("\n");
-	  printf("Total comsumption:%f\n", cost);
+	  printf("**************************************\n");
+	  printf("Total test sample: %d\n",MAX_TEST);
+	  printf("Average cost: %f\n", tot_cost/MAX_TEST);
+	  printf("**************************************\n");
   }
   else
   {
